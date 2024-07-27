@@ -47,3 +47,9 @@ export const detail = async (id: string) => {
 
   return result
 }
+
+export const edit = async (row: any) => {
+  return await sql`UPDATE XLSXJSON
+SET name = ${row.name}
+WHERE id = ${row.id};`
+}

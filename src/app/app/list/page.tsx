@@ -6,6 +6,7 @@ import { QueryResultRow } from "@vercel/postgres"
 import { Button, Upload, message } from "antd"
 import { useEffect, useState } from "react"
 import { AddModal } from "@/components/add-modal"
+import { EditModal } from "@/components/edit-modal"
 
 export default function List() {
   const [data, setData] = useState<QueryResultRow[]>([])
@@ -42,7 +43,7 @@ export default function List() {
       </div>
       <AddModal
         visible={visible}
-        updateList={fetchAndUpdateList}
+        refresh={fetchAndUpdateList}
         setVisible={setVisible}
       />
     </div>
