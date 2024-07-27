@@ -17,8 +17,9 @@ SET is_del = 1
 WHERE id = ${id};`
 }
 
-export async function uploadFile(formData: FormData) {
+export async function add(formData: FormData) {
   const file = formData.get("file") as File
+  const name = formData.get("name")
   const arrayBuffer = await file.arrayBuffer()
   const buffer = new Uint8Array(arrayBuffer)
 
@@ -30,7 +31,7 @@ export async function uploadFile(formData: FormData) {
   await db
     .insertInto("xlsxjson")
     .values({
-      name: "default name",
+      name,
       data: JSON.stringify(sheet),
       is_del: 0,
     })

@@ -1,15 +1,16 @@
 "use client"
 
-import { del, fetchList, uploadFile } from "@/db/sql"
+import { del, fetchList } from "@/db/sql"
 import Table from "@/components/list-table"
 import { QueryResultRow } from "@vercel/postgres"
 import { Button, Upload, message } from "antd"
 import { useEffect, useState } from "react"
+import { AddModal } from "@/components/add-modal"
 
 export default function List() {
   const [data, setData] = useState<QueryResultRow[]>([])
   const [loading, setLoading] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   const fetchAndUpdateList = () => {
     setLoading(true)
@@ -27,25 +28,9 @@ export default function List() {
   return (
     <div>
       <div className="flex justify-end">
-        <Upload
-          showUploadList={false}
-          customRequest={async (opt) => {
-            const formData = new FormData()
-            formData.set("file", opt.file)
-            try {
-              setSubmitting(true)
-              await uploadFile(formData)
-              message.success("上传成功")
-              fetchAndUpdateList()
-            } catch (e: any) {
-              message.error(e?.message ?? "上传失败")
-            } finally {
-              setSubmitting(false)
-            }
-          }}
-        >
-          <Button loading={submitting}>上传文件</Button>
-        </Upload>
+        <Button type="primary" onClick={() => setVisible(true)}>
+          新增表格
+        </Button>
       </div>
       <div className="mt-4">
         <Table
@@ -55,6 +40,11 @@ export default function List() {
           refresh={fetchAndUpdateList}
         />
       </div>
+      <AddModal
+        visible={visible}
+        updateList={fetchAndUpdateList}
+        setVisible={setVisible}
+      />
     </div>
   )
 }
