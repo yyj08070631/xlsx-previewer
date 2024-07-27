@@ -14,7 +14,7 @@ export default function Page({ params }: { params: { id: string } }) {
     detail(params.id)
       .then((data) => {
         setData(data)
-        console.log(data)
+        document.title = data.name
       })
       .catch((e: any) => message.error(e?.message ?? "获取数据失败"))
       .finally(() => setLoading(false))
