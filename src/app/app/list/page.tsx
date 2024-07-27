@@ -1,6 +1,6 @@
 "use client"
 
-import { del, fetchList, uploadFile } from "@/app/db/sql"
+import { del, fetchList, uploadFile } from "@/db/sql"
 import Table from "@/components/list-table"
 import { QueryResultRow } from "@vercel/postgres"
 import { Button, Upload, message } from "antd"

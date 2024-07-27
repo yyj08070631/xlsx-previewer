@@ -30,9 +30,19 @@ export async function uploadFile(formData: FormData) {
   await db
     .insertInto("xlsxjson")
     .values({
-      name: "babyboy",
+      name: "default name",
       data: JSON.stringify(sheet),
       is_del: 0,
     })
     .execute()
+}
+
+export const detail = async (id: string) => {
+  const result = await db
+    .selectFrom("xlsxjson")
+    .selectAll()
+    .where("id", "=", id)
+    .executeTakeFirstOrThrow() // 使用 executeTakeFirstOrThrow 以便在找不到记录时抛出错误
+
+  return result
 }

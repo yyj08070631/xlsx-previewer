@@ -1,15 +1,8 @@
 "use client"
 
-import React, { useState } from "react"
+import React from "react"
 import { Button, Modal, Space, Table, message } from "antd"
-import { Image, TableColumnsType, TableProps } from "antd"
-
-interface DataType {
-  id: number
-  name: string
-  data: any
-  created_at: string
-}
+import { TableColumnsType, TableProps } from "antd"
 
 const useColumns = (refresh: Function, del: Function) => {
   const columns: TableColumnsType = [
@@ -25,6 +18,9 @@ const useColumns = (refresh: Function, del: Function) => {
       title: "action",
       render: (value, row) => (
         <Space>
+          <Button href={`/app/detail/${row.id}`} target="_blank">
+            查看
+          </Button>
           <Button
             onClick={() => {
               Modal.confirm({
@@ -59,55 +55,6 @@ const onChange: TableProps["onChange"] = (
   console.log("params", pagination, filters, sorter, extra)
 }
 
-const expandedRowRender = (row: DataType) => {
-  const expandedColumns: TableColumnsType = Object.keys(
-    row?.data?.[0] ?? {}
-  ).map((key) => {
-    const needSort = ["求和项:install", "求和项:revenue"].includes(key)
-    const needFilter = ["mtg_category_level_1"].includes(key)
-    return {
-      title: key,
-      dataIndex: key,
-      showSorterTooltip: { target: "full-header" },
-      sorter: needSort ? (v1, v2) => v1[key] - v2[key] : false,
-      filters: needFilter
-        ? Object.values(
-            row?.data?.reduce((accu: any, curr: any) => {
-              if (!accu[key]) {
-                accu[key] = { text: curr[key], value: curr[key] }
-              }
-              return accu
-            }, {}) ?? {}
-          )
-        : undefined,
-      filterMode: "tree",
-      filterSearch: needFilter,
-      onFilter: (value, record) => record[key].startsWith(value as string),
-      render:
-        key === "creative_url"
-          ? (v) => <Image src={v} width={200} alt="" />
-          : key === "preview_url"
-          ? (v) => (
-              <a href={v} target="_blank">
-                {v}
-              </a>
-            )
-          : (v) => v,
-    }
-  })
-
-  return (
-    <Table
-      columns={expandedColumns}
-      dataSource={row.data}
-      pagination={{ pageSize: 10 }}
-      rowKey={() => window.crypto.randomUUID()}
-      scroll={{ x: true }}
-      className="w-[calc(100vw-168px)]"
-    />
-  )
-}
-
 interface Props {
   data: any[]
   loading: boolean
@@ -119,7 +66,6 @@ const App: React.FC<Props> = ({ data, loading, del, refresh }) => {
 
   return (
     <Table
-      expandable={{ expandedRowRender }}
       loading={loading}
       columns={columns}
       dataSource={data}
