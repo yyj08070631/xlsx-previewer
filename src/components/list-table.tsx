@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react"
 import { Button, Modal, Space, Table, message } from "antd"
 import { TableProps } from "antd"
 import { EditModal } from "./edit-modal"
+import dayjs from "dayjs"
 
 const onChange: TableProps["onChange"] = (
   pagination,
@@ -37,11 +38,10 @@ const App: React.FC<Props> = ({ data, loading, del, refresh }) => {
         columns={[
           { title: "id", dataIndex: "id" },
           { title: "name", dataIndex: "name" },
-          { title: "data", dataIndex: "data", render: () => "Object" },
           {
             title: "created_at",
             dataIndex: "created_at",
-            render: (value) => value.toJSON(),
+            render: (value) => dayjs(value).format('YYYY-MM-DD HH:mm:ss'),
           },
           {
             title: "action",

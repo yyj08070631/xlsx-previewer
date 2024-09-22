@@ -7,7 +7,7 @@ const db = createKysely<{ xlsxjson: any }>()
 
 export const fetchList = async () => {
   const { rows } =
-    await sql`SELECT * FROM XLSXJSON WHERE is_del IS NULL OR is_del != 1;`
+    await sql`SELECT id, name, created_at FROM XLSXJSON WHERE is_del IS NULL OR is_del != 1 ORDER BY created_at DESC;`
   return rows
 }
 

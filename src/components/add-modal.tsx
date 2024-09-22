@@ -3,6 +3,7 @@ import { useForm } from "antd/es/form/Form"
 import { XUpload } from "./upload"
 import { useState } from "react"
 import { add } from "@/db/sql"
+import { RcFile } from "antd/es/upload"
 
 interface AddModalProps {
   visible?: boolean
@@ -45,14 +46,20 @@ export const AddModal = ({ visible, refresh, setVisible }: AddModalProps) => {
           name={["name"]}
           rules={[{ required: true, message: "请输入表格名称" }]}
         >
-          <Input placeholder="请输入表格名称" />
+          <Input placeholder="默认填入文件名" />
         </Form.Item>
         <Form.Item
           label={"源文件"}
           name={["files"]}
           rules={[{ required: true, message: "请上传源文件" }]}
         >
-          <XUpload />
+          <XUpload
+            onChange={(files) => {
+              if (!form.getFieldValue("name") && (files?.[0] as RcFile)?.name) {
+                form.setFieldValue("name", (files[0] as RcFile).name)
+              }
+            }}
+          />
         </Form.Item>
         <Form.Item className="flex justify-end">
           <Button type="primary" htmlType="submit" loading={submitting}>
